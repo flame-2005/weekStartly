@@ -1,9 +1,13 @@
 import React from 'react'
 
-const layoutPopOver = () => {
+type LayoutPopOverProps = {
+  children: React.ReactNode
+}
+
+const layoutPopOver = ({children}:LayoutPopOverProps) => {
   return (
     <div>
-      
+      {children}
     </div>
   )
 }

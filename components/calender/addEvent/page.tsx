@@ -1,9 +1,11 @@
 "use client"
 
-import React, { useEffect, useRef, useState } from "react"
+import React, { use, useEffect, useRef, useState } from "react"
 import { useEvents } from "@/context/EventContext"
 import { EventActionType, EventActivityEmojis, EventActivityType, MoodType, WeekendTheme } from "@/constants/event"
 import { signIn, useSession } from "next-auth/react"
+import { useToast } from "@/context/toastContest"
+import CircularLoader from "@/components/circularLoader/page"
 
 type EventModalProps = {
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -28,13 +30,15 @@ const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event
     const [title, setTitle] = useState(event?.title || "")
     const [mood, setMood] = useState(event?.mood || "")
     const [theme, setTheme] = useState(event?.mood || "")
-    const [time, setTime] = useState(event ? new Date(event.date).toISOString().slice(11, 16) : "")
-    const [end, setEnd] = useState(event ? new Date(event.date).toISOString().slice(11, 16) : "")
+    const [time, setTime] = useState(event ? new Date(event.date).toISOString().slice(11, 16) : "");
+    const [end, setEnd] = useState(event && event.end ? new Date(event.end).toISOString().slice(11, 16) : "");
     const [activity, setActivity] = useState<EventActivityType | "">(event?.activity || "")
     const eventIdRef = useRef<string | null>(null)
+    const [saving, setSaving] = useState(false);
+    const [updating, setUpdating] = useState(false);
 
+    const { showToast } = useToast();
 
-    // 🔄 Reset fields when editing a new event
     useEffect(() => {
         if (event) {
             setTitle(event.title)
@@ -64,13 +68,16 @@ const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event
         }
 
         // Build proper date object
-        const [dd, mm, yyyy] = date.split("-").map(Number)
-        const [hours, minutes] = time.split(":").map(Number)
-        const eventDate = new Date(yyyy, mm - 1, dd, hours, minutes).toISOString()
-        const endDate = new Date(yyyy, mm - 1, dd, ...end.split(":").map(Number)).toISOString();
+        const [dd, mm, yyyy] = date.split("-").map(Number);
+        const [startHours, startMinutes] = time.split(":").map(Number);
+        const [endHours, endMinutes] = end.split(":").map(Number);
+
+        const eventDate = new Date(yyyy, mm - 1, dd, startHours, startMinutes).toISOString();
+        const endDate = new Date(yyyy, mm - 1, dd, endHours, endMinutes).toISOString();
 
 
         if (event) {
+            setUpdating(true);
             try {
                 const res = await fetch("/api/google-calendar/update", {
                     method: "POST",
@@ -91,6 +98,7 @@ const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event
                     console.log("✅ Event updated in Google Calendar");
                 } else {
                     console.error("❌ Failed to update event in Google Calendar", data.error);
+                    showToast(`Failed to update event in Google Calendar: ${data.error}`, "error");
                 }
             } catch (err) {
                 console.error("❌ Failed to update event in Google Calendar", err);
@@ -101,10 +109,13 @@ const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event
                 payload: {
                     ...event, title, date: eventDate, activity: activity as EventActivityType, mood: mood as MoodType,
                     theme: theme as WeekendTheme,
-                    end: end
+                    end: endDate
                 },
             })
+            setUpdating(false);
+            showToast("Event Updated successfully!", "success")
         } else {
+            setSaving(true);
             if (session?.accessToken) {
                 try {
                     const res = await fetch("/api/google-calendar/add", {
@@ -141,18 +152,26 @@ const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event
                     activity: activity as EventActivityType,
                     mood: mood as MoodType,
                     theme: theme as WeekendTheme,
-                    end: end,
+                    end: endDate,
                     eventId: eventIdRef.current || undefined
                 },
             })
-            console.log("Session:", session, "Status:", status);
-
+            setSaving(false);
+            showToast("Event added successfully!", "success")
         }
         setTitle("")
         setTime("")
         setActivity("")
         setDate("")
         setIsOpen(false)
+    }
+
+    if(saving){
+        return <CircularLoader size={72} thickness={6} message="Saving..." />
+    }
+
+    if(updating){
+        return <CircularLoader size={72} thickness={6} message="Updating..." />
     }
 
     return (

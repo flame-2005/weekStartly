@@ -16,6 +16,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as UpdateEventRequestBody;
     const { accessToken, eventId, event } = body;
+    console.log("Received body:", body);
     const result = await updateGoogleCalendarEvent(accessToken, eventId, event);
     return NextResponse.json({ success: true, result });
   } catch (error) {

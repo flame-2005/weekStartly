@@ -36,7 +36,7 @@ const EventList: React.FC<EventListProps> = ({ events }) => {
   }
 
   return (
-    <div className="md:max-h-[100vh] max-h-[50vh] overflow-y-auto pr-2">
+    <div className="md:max-h-[100vh] max-h-[50vh] overflow-visible pr-2">
 
     <DragDropContext onDragEnd={handleDragEnd}>
       <Droppable droppableId="event-list">

@@ -13,7 +13,6 @@ export default function Home() {
   return (
     <div className="container mx-auto">
       <div className="w-[100%] bg-blue-600 p-4 mb-4 flex items-center">
-
         <h1 className="text-white text-2xl font-bold px-4">Weekendly your very own personalize weekend planner
         </h1>
       </div>

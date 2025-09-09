@@ -1,7 +1,7 @@
 "use client"
 
 import { GoogleCalendarEvent, Holiday } from "@/constants/calender"
-import React, { createContext, useReducer, useContext, ReactNode, useEffect } from "react"
+import React, { createContext, useContext, ReactNode, useEffect } from "react"
 
 type State = {
     holidays: Holiday[]
