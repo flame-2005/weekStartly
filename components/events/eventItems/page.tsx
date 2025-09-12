@@ -10,6 +10,7 @@ import { useSession } from "next-auth/react"
 import { useToast } from "@/context/toastContest"
 import ThemeBadge from "@/components/badges/ThemeBadge/page"
 import MoodBadge from "@/components/badges/MoodBadge/page"
+import { Clicker_Script } from "next/font/google"
 
 type EventItemProps = {
   id: string
@@ -66,13 +67,28 @@ const EventItem: React.FC<EventItemProps> = ({ id, title, date, eventType, mood,
           showToast("Event deleted from Google Calendar", "success");
           eventId = '';
         } else {
-          console.error("❌ Failed to delete event from Google Calendar", data.error);
+          showToast("❌ Failed to delete event from Google Calendar", "error");
         }
       } catch (err) {
-        console.error("❌ Failed to delete event from Google Calendar", err);
+        showToast("❌ Failed to delete event from Google Calendar", "error");
       }
     }
   };
+
+  const generateGoogleCalendarShareLink = (event: {
+    title: string
+    date: string
+    end: string
+    activity: string
+  }) => {
+    const start = encodeURIComponent(event.date.replace(/-|:|\.\d\d\d/g, ""))
+    const end = encodeURIComponent(event.end.replace(/-|:|\.\d\d\d/g, ""))
+    const title = encodeURIComponent(event.title)
+    const details = encodeURIComponent(`${event.activity} - Planned via Weekendly`)
+
+    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}`
+  }
+
 
   return (
     <div>
@@ -120,7 +136,18 @@ const EventItem: React.FC<EventItemProps> = ({ id, title, date, eventType, mood,
                     dispatch({ type: EventActionType.REMOVE, payload: id });
                   }
                 },
-                { label: "Share", onClick: () => alert("Share clicked") },
+                {
+                  label: "Share", onClick: () => {
+                    const shareLink = generateGoogleCalendarShareLink({ title, date, end: end || date, activity: eventType })
+                    navigator.clipboard.writeText(shareLink)
+                      .then(() => {
+                        showToast("📋 Google Calendar share link copied to clipboard", "success")
+                      })
+                      .catch(() => {
+                        showToast("❌ Failed to copy link to clipboard", "error")
+                      })
+                  }
+                },
               ]}
             />
           </div>

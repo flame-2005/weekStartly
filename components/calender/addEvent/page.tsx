@@ -10,11 +10,14 @@ import CircularLoader from "@/components/circularLoader/page"
 type EventModalProps = {
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
     date: string
+    endDate?: string
     setDate: React.Dispatch<React.SetStateAction<string>>
+    isCustomEvent?: boolean
     event?: {
         id: string
         title: string
         date: string
+        endDate?: string
         activity: EventActivityType
         mood?: MoodType
         theme?: WeekendTheme
@@ -24,7 +27,7 @@ type EventModalProps = {
 
 }
 
-const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event }) => {
+const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event, isCustomEvent }) => {
     const { dispatch } = useEvents()
 
     const [title, setTitle] = useState(event?.title || "")
@@ -51,11 +54,22 @@ const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event
         }
     }, [event])
 
+    useEffect(() => {
+        console.log(date)
+    }, [date])
+
+
     const { data: session, status } = useSession()
 
     if (status === "unauthenticated") {
         return <button onClick={() => signIn()}>Please signin to google account</button>;
     }
+
+    const formatDateToDDMMYYYY = (date: string) => {
+        if (!date) return "";
+        const [year, month, day] = date.split("-");
+        return `${day}-${month}-${year}`;
+    };
 
     const handleSave = async () => {
         if (!title || !date || !time || !activity) {
@@ -67,8 +81,9 @@ const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event
             return
         }
 
+
         // Build proper date object
-        const [dd, mm, yyyy] = date.split("-").map(Number);
+        const [dd, mm, yyyy] = formatDateToDDMMYYYY(date).split("-").map(Number);
         const [startHours, startMinutes] = time.split(":").map(Number);
         const [endHours, endMinutes] = end.split(":").map(Number);
 
@@ -95,15 +110,13 @@ const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event
                 });
                 const data = await res.json();
                 if (data.success) {
-                    console.log("✅ Event updated in Google Calendar");
+                    showToast("Event Updated in Google Calendar successfully!", "success")
                 } else {
-                    console.error("❌ Failed to update event in Google Calendar", data.error);
                     showToast(`Failed to update event in Google Calendar: ${data.error}`, "error");
                 }
             } catch (err) {
-                console.error("❌ Failed to update event in Google Calendar", err);
+                showToast(`Failed to update event in Google Calendar: ${err}`, "error");
             }
-            console.log("Updating event:", { ...event, title, date: eventDate, activity })
             dispatch({
                 type: EventActionType.UPDATE,
                 payload: {
@@ -133,13 +146,12 @@ const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event
                     });
                     const data = await res.json();
                     if (data.success) {
-                        console.log("✅ Event added to Google Calendar");
                         eventIdRef.current = data.result.data.id;
                     } else {
-                        console.error("❌ Failed to add event to Google Calendar", data.error);
+                        showToast("❌ Failed to add event to Google Calendar", "error")
                     }
                 } catch (err) {
-                    console.error("❌ Failed to add event to Google Calendar", err);
+                    showToast("❌ Failed to add event to Google Calendar", "error")
                 }
             }
             // ✅ ADD
@@ -166,13 +178,15 @@ const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event
         setIsOpen(false)
     }
 
-    if(saving){
+    if (saving) {
         return <CircularLoader size={72} thickness={6} message="Saving..." />
     }
 
-    if(updating){
+    if (updating) {
         return <CircularLoader size={72} thickness={6} message="Updating..." />
     }
+
+
 
     return (
         <div className="text-black p-6 bg-white rounded-lg shadow-lg w-full max-w-md mx-auto">
@@ -191,6 +205,21 @@ const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event
                 />
 
                 {/* Time Input */}
+                {isCustomEvent && (
+                    <div>
+                        <label htmlFor="date" className="text-sm font-medium text-gray-900">
+                            Select Date:
+                        </label>
+                        <input
+                            type="date"
+                            id="date"
+                            className="w-full px-3 py-2 border rounded bg-gray-50"
+                            value={date}
+                            onChange={(e) => setDate(e.target.value)}
+                            required
+                        />
+                    </div>
+                )}
                 <div className="flex flex-row space-x-4 items-center">
                     <label htmlFor="time" className="text-sm font-medium text-gray-900">
                         Select Start time:

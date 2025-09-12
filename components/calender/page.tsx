@@ -195,6 +195,24 @@ const Calendar: React.FC<CalendarProps> = ({ year, month, holidays = [] }) => {
                 })}
 
             </div>
+            <Modal
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+                trigger ={<>
+                <button onClick={() => {setIsOpen(true)
+                    setDate("")
+                }} className="text-center text-blue-600 font-semibold cursor-pointer mb-2 hover:underline">
+                    Add Custom Event
+                </button>
+                </>}
+            >
+                <AddEventModal
+                setIsOpen={setIsOpen}
+                date={date}
+                setDate={setDate}
+                isCustomEvent = {true}
+            />
+            </Modal>
         </div>
     )
 }

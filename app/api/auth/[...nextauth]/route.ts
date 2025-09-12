@@ -30,7 +30,6 @@ async function refreshAccessToken(token: ExtendedToken): Promise<ExtendedToken> 
       refreshToken: credentials.refresh_token ?? token.refreshToken,
     };
   } catch (error) {
-    console.error("Error refreshing access token", error);
     return { ...token, error: "RefreshAccessTokenError" };
   }
 }

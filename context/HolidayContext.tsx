@@ -66,14 +66,12 @@ export function HolidayProvider({ children }: { children: ReactNode }) {
 
                 if (!res.ok) {
                     const errorText = await res.text()
-                    console.error("API Response:", res.status, res.statusText, errorText)
                     throw new Error(`Google API error (${res.status}): ${res.statusText}. ${errorText}`)
                 }
 
                 const data: { items: GoogleCalendarEvent[] } = await res.json()
 
                 if (!data.items) {
-                    console.warn("No items found in API response:", data)
                     dispatch({ type: "SET_HOLIDAYS", payload: [] })
                     return
                 }
@@ -88,7 +86,6 @@ export function HolidayProvider({ children }: { children: ReactNode }) {
 
             } catch (error) {
                 const errorMessage = error instanceof Error ? error.message : "Unknown error occurred"
-                console.error("Failed to fetch holidays:", error)
                 dispatch({ type: "SET_ERROR", payload: errorMessage })
             }
         }

@@ -14,13 +14,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true, result });
   } catch (error) {
     if (error instanceof Error) {
-      console.error("API error:", error);
       return NextResponse.json(
         { success: false, error: error.message },
         { status: 500 }
       );
     }
-    console.error("API error:", error);
     return NextResponse.json(
       { success: false, error: "Unknown error" },
       { status: 500 }

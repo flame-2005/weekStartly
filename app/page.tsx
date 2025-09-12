@@ -8,7 +8,6 @@ import { useHolidays } from "@/context/HolidayContext"
 export default function Home() {
   const { state } = useHolidays()
   const holidays = state.holidays
-  console.log("Holidays in Home:", holidays)
 
   return (
     <div className="container mx-auto">
