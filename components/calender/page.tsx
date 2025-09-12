@@ -17,6 +17,7 @@ const Calendar: React.FC<CalendarProps> = ({ year, month, holidays = [] }) => {
     const [currentMonth, setCurrentMonth] = useState<number>(month ?? today.getMonth())
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [date, setDate] = useState<string>("");
+    const [isCustomEvent, setIsCustomEvent] = useState<boolean>(false);
 
 
     const firstDayOfMonth = new Date(currentYear, currentMonth, 1)
@@ -138,6 +139,7 @@ const Calendar: React.FC<CalendarProps> = ({ year, month, holidays = [] }) => {
                                         key={day}
                                         onClick={() => {
                                             setIsOpen(true)
+                                            setIsCustomEvent(false)
                                             setDate(getDateForDay(currentYear, currentMonth, day))
                                         }}
                                         className={`${baseClasses} text-red-600 font-semibold hover:bg-red-500 hover:text-white`}
@@ -164,6 +166,7 @@ const Calendar: React.FC<CalendarProps> = ({ year, month, holidays = [] }) => {
                                     setIsOpen={setIsOpen}
                                     date={date}
                                     setDate={setDate}
+                                    isCustomEvent={isCustomEvent}
                                 />
                             </Modal>
 
@@ -201,6 +204,7 @@ const Calendar: React.FC<CalendarProps> = ({ year, month, holidays = [] }) => {
                 trigger ={<>
                 <button onClick={() => {setIsOpen(true)
                     setDate("")
+                    setIsCustomEvent(true)
                 }} className="text-center text-blue-600 font-semibold cursor-pointer mb-2 hover:underline">
                     Add Custom Event
                 </button>
@@ -210,7 +214,7 @@ const Calendar: React.FC<CalendarProps> = ({ year, month, holidays = [] }) => {
                 setIsOpen={setIsOpen}
                 date={date}
                 setDate={setDate}
-                isCustomEvent = {true}
+                isCustomEvent = {isCustomEvent}
             />
             </Modal>
         </div>

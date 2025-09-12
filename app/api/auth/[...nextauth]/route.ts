@@ -10,7 +10,9 @@ interface ExtendedToken extends JWT {
   error?: string;
 }
 
-async function refreshAccessToken(token: ExtendedToken): Promise<ExtendedToken> {
+async function refreshAccessToken(
+  token: ExtendedToken
+): Promise<ExtendedToken> {
   try {
     const client = new google.auth.OAuth2(
       process.env.GOOGLE_CLIENT_ID,
@@ -41,7 +43,8 @@ const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       authorization: {
         params: {
-          scope: "openid email profile https://www.googleapis.com/auth/calendar",
+          scope:
+            "openid email profile https://www.googleapis.com/auth/calendar",
           access_type: "offline",
           prompt: "consent",
         },
@@ -49,7 +52,9 @@ const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, account }): Promise<ExtendedToken> {
+    async jwt({ token, account }) {
+      const newToken = token as ExtendedToken;
+
       // Initial sign in
       if (account) {
         return {
@@ -57,21 +62,22 @@ const authOptions: NextAuthOptions = {
           accessTokenExpires: account.expires_at
             ? account.expires_at * 1000
             : undefined,
-          refreshToken: account.refresh_token,
+          refreshToken: account.refresh_token ?? newToken.refreshToken,
         };
       }
 
       // Return previous token if the access token has not expired yet
       if (
-        typeof token.accessTokenExpires === "number" &&
-        Date.now() < token.accessTokenExpires
+        typeof newToken.accessTokenExpires === "number" &&
+        Date.now() < newToken.accessTokenExpires
       ) {
-        return token as ExtendedToken;
+        return newToken;
       }
 
-      // Access token has expired, try to update it
-      return await refreshAccessToken(token as ExtendedToken);
+      // Access token has expired, refresh it
+      return await refreshAccessToken(newToken);
     },
+
     async session({ session, token }) {
       // Type-safe assignment
       return {

@@ -27,7 +27,7 @@ type EventModalProps = {
 
 }
 
-const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event, isCustomEvent }) => {
+const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event, isCustomEvent = false }) => {
     const { dispatch } = useEvents()
 
     const [title, setTitle] = useState(event?.title || "")
@@ -54,10 +54,6 @@ const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event
         }
     }, [event])
 
-    useEffect(() => {
-        console.log(date)
-    }, [date])
-
 
     const { data: session, status } = useSession()
 
@@ -83,7 +79,7 @@ const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event
 
 
         // Build proper date object
-        const [dd, mm, yyyy] = formatDateToDDMMYYYY(date).split("-").map(Number);
+        const [dd, mm, yyyy] = isCustomEvent ?  formatDateToDDMMYYYY(date).split("-").map(Number) : date.split("-").map(Number);
         const [startHours, startMinutes] = time.split(":").map(Number);
         const [endHours, endMinutes] = end.split(":").map(Number);
 
