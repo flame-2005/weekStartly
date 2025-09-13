@@ -148,8 +148,8 @@ const Calendar: React.FC<CalendarProps> = ({ year, month, holidays = [] }) => {
                                         {holiday && (
                                             <div className="absolute bottom-1 right-1 group">
                                                 {/* Holiday Badge */}
-                                                <span className="bg-red-500 text-white text-[10px] px-1 rounded cursor-pointer group-hover:bg-red-600 transition">
-                                                    {holiday.title.length > 6 ? holiday.title.slice(0, 6) + "…" : holiday.title}
+                                                <span className="bg-red-500 text-white text-[10px] px-1 rounded cursor-pointer group-hover:bg-red-600 transition  overflow-hidden text-ellipsis whitespace-nowrap block">
+                                                    {holiday.title.length > 6 ? holiday.title.slice(0, 5) + "…" : holiday.title}
                                                 </span>
 
                                                 {/* Tooltip */}
@@ -184,8 +184,8 @@ const Calendar: React.FC<CalendarProps> = ({ year, month, holidays = [] }) => {
 
                             {holiday && (
                                 <div className="absolute bottom-1 right-1 group">
-                                    <span className="bg-red-500 text-white text-[10px] px-1 rounded cursor-pointer group-hover:bg-red-600 transition">
-                                        {holiday.title.length > 6 ? holiday.title.slice(0, 6) + "…" : holiday.title}
+                                    <span className="bg-red-500 text-white text-[10px] px-1 rounded cursor-pointer group-hover:bg-red-600 transition  overflow-hidden text-ellipsis whitespace-nowrap block">
+                                        {holiday.title.length > 6 ? holiday.title.slice(0, 5) + "…" : holiday.title}
                                     </span>
                                     <div className="absolute bottom-full right-0 mb-1 hidden group-hover:block bg-gray-900 text-white text-xs px-2 py-1 rounded shadow-lg whitespace-nowrap z-10">
                                         {holiday.title}
@@ -201,21 +201,22 @@ const Calendar: React.FC<CalendarProps> = ({ year, month, holidays = [] }) => {
             <Modal
                 isOpen={isOpen}
                 setIsOpen={setIsOpen}
-                trigger ={<>
-                <button onClick={() => {setIsOpen(true)
-                    setDate("")
-                    setIsCustomEvent(true)
-                }} className="text-center text-blue-600 font-semibold cursor-pointer mb-2 hover:underline">
-                    Add Custom Event
-                </button>
+                trigger={<>
+                    <button onClick={() => {
+                        setIsOpen(true)
+                        setDate("")
+                        setIsCustomEvent(true)
+                    }} className="text-center text-blue-600 font-semibold cursor-pointer mb-2 hover:underline">
+                        Add Custom Event
+                    </button>
                 </>}
             >
                 <AddEventModal
-                setIsOpen={setIsOpen}
-                date={date}
-                setDate={setDate}
-                isCustomEvent = {isCustomEvent}
-            />
+                    setIsOpen={setIsOpen}
+                    date={date}
+                    setDate={setDate}
+                    isCustomEvent={isCustomEvent}
+                />
             </Modal>
         </div>
     )

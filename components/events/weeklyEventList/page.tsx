@@ -27,7 +27,7 @@ const WeeklyEventsList: React.FC = () => {
   })
 
   return (
-    <section className="p-4 max-w-xl max-h-[25vh] mx-auto">
+    <section className="p-4 max-w-xl md:max-h-[25vh] mx-auto">
       <h2 className="text-xl font-bold mb-4">This Week&apos;s Plans</h2>
 
       {weeklyEvents.length === 0 ? (

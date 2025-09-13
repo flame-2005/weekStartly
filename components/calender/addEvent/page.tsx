@@ -56,8 +56,8 @@ const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event
     useEffect(() => {
         if (event) {
             setTitle(event.title);
-            setTime(getLocalTimeString(event.date));   // ✅ Local time
-            setEnd(event.end ? getLocalTimeString(event.end) : ""); // ✅ Local end time
+            setTime(getLocalTimeString(event.date)); 
+            setEnd(event.end ? getLocalTimeString(event.end) : "");
             setActivity(event.activity);
         } else {
             setTitle("");
