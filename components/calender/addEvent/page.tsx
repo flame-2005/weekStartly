@@ -33,26 +33,40 @@ const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event
     const [title, setTitle] = useState(event?.title || "")
     const [mood, setMood] = useState(event?.mood || "")
     const [theme, setTheme] = useState(event?.mood || "")
-    const [time, setTime] = useState(event ? new Date(event.date).toISOString().slice(11, 16) : "");
-    const [end, setEnd] = useState(event && event.end ? new Date(event.end).toISOString().slice(11, 16) : "");
+
+    // Utility to format date to HH:MM in local time
+    const getLocalTimeString = (dateStr: string) => {
+        const d = new Date(dateStr);
+        const hours = d.getHours().toString().padStart(2, "0");
+        const minutes = d.getMinutes().toString().padStart(2, "0");
+        return `${hours}:${minutes}`;
+    };
+
+    const [time, setTime] = useState(event ? getLocalTimeString(event.date) : "");
+    const [end, setEnd] = useState(event?.end ? getLocalTimeString(event.end) : "");
+
     const [activity, setActivity] = useState<EventActivityType | "">(event?.activity || "")
     const eventIdRef = useRef<string | null>(null)
     const [saving, setSaving] = useState(false);
     const [updating, setUpdating] = useState(false);
 
     const { showToast } = useToast();
+    console.log(event);
 
     useEffect(() => {
         if (event) {
-            setTitle(event.title)
-            setTime(new Date(event.date).toISOString().slice(11, 16))
-            setActivity(event.activity)
+            setTitle(event.title);
+            setTime(getLocalTimeString(event.date));   // ✅ Local time
+            setEnd(event.end ? getLocalTimeString(event.end) : ""); // ✅ Local end time
+            setActivity(event.activity);
         } else {
-            setTitle("")
-            setTime("")
-            setActivity("")
+            setTitle("");
+            setTime("");
+            setEnd("");
+            setActivity("");
         }
-    }, [event])
+    }, [event]);
+
 
 
     const { data: session, status } = useSession()
@@ -79,7 +93,7 @@ const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event
 
 
         // Build proper date object
-        const [dd, mm, yyyy] = isCustomEvent ?  formatDateToDDMMYYYY(date).split("-").map(Number) : date.split("-").map(Number);
+        const [dd, mm, yyyy] = isCustomEvent ? formatDateToDDMMYYYY(date).split("-").map(Number) : date.split("-").map(Number);
         const [startHours, startMinutes] = time.split(":").map(Number);
         const [endHours, endMinutes] = end.split(":").map(Number);
 
