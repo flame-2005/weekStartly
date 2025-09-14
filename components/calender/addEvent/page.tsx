@@ -234,7 +234,7 @@ const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event
     }
 
     return (
-        <div className=" flex items-center justify-center p-4 z-50">
+        <div className=" flex items-center justify-center z-50">
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-auto max-h-[90vh] overflow-y-auto">
                 {/* Header */}
                 <div className="flex items-center justify-between p-4 border-b border-gray-100">

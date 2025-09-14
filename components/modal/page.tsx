@@ -38,13 +38,7 @@ const Modal: React.FC<ModalProps> = ({ trigger, children, isOpen, setIsOpen }) =
 
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 modal-backdrop">
-          <div className="bg-white rounded-lg shadow-lg w-[90%] max-w-md p-6 relative max-h-[80vh] overflow-y-auto">
-            <button
-              onClick={() => setIsOpen(false)}
-              className="absolute top-3 right-3 text-gray-500 hover:text-black text-xl z-10 bg-white rounded-full w-8 h-8 flex items-center justify-center"
-            >
-              &times;
-            </button>
+          <div className="bg-white rounded-lg shadow-lg w-[90%] max-w-md relative max-h-[90vh] overflow-y-auto">
             {children}
           </div>
         </div>
