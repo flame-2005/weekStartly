@@ -1,2 +1,21 @@
 @import "tailwindcss";
 
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body.keyboard-open {
+  height: auto;
+}
+
+.modal-backdrop {
+  height: 100vh;
+  height: 100dvh; /* Dynamic viewport height - newer browsers */
+}
+
+@supports not (height: 100dvh) {
+  .modal-backdrop {
+    height: calc(var(--vh, 1vh) * 100);
+  }
+}

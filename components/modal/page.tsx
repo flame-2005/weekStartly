@@ -1,29 +1,55 @@
-"use client";
+"use client"
 
-import React, { useState, ReactElement } from "react";
+import React, { useState, ReactElement, useEffect } from "react"
 
 type ModalProps = {
-  trigger: ReactElement;
-  children: React.ReactNode;
-  isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-};
+  trigger: ReactElement
+  children: React.ReactNode
+  isOpen: boolean
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
 
-const Modal: React.FC<ModalProps> = ({ trigger, children, isOpen, setIsOpen }) => {
+export const Modal: React.FC<ModalProps> = ({ trigger, children, isOpen, setIsOpen }) => {
+  useEffect(() => {
+    if (isOpen) {
+      // Prevent body scroll when modal is open
+      document.body.style.overflow = 'hidden'
+      // Store the current viewport height
+      const vh = window.innerHeight * 0.01
+      document.documentElement.style.setProperty('--vh', `${vh}px`)
+      
+      // Update on resize (keyboard open/close)
+      const updateVH = () => {
+        const vh = window.innerHeight * 0.01
+        document.documentElement.style.setProperty('--vh', `${vh}px`)
+      }
+      
+      window.addEventListener('resize', updateVH)
+      return () => {
+        document.body.style.overflow = 'unset'
+        window.removeEventListener('resize', updateVH)
+      }
+    }
+  }, [isOpen])
+
   return (
     <>
       {trigger}
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          {/* Scrollable container for small screens */}
-          <div
-            className="rounded-2xl shadow-xl w-[90%] max-w-md bg-white max-h-[90vh] overflow-y-auto p-6 relative"
-            style={{ WebkitOverflowScrolling: "touch" }}
-          >
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/20"
+          style={{ 
+            height: '100vh',
+            height: 'calc(var(--vh, 1vh) * 100)',
+            minHeight: '100vh',
+            minHeight: 'calc(var(--vh, 1vh) * 100)'
+          }}
+        >
+          <div className="bg-white rounded-lg shadow-lg w-[90%] max-w-md p-6 relative max-h-[80vh] overflow-y-auto">
             <button
               onClick={() => setIsOpen(false)}
-              className="absolute top-3 right-3 text-gray-500 hover:text-black text-xl"
+              className="absolute top-3 right-3 text-gray-500 hover:text-black text-xl z-10 bg-white rounded-full w-8 h-8 flex items-center justify-center"
             >
               &times;
             </button>
@@ -32,7 +58,5 @@ const Modal: React.FC<ModalProps> = ({ trigger, children, isOpen, setIsOpen }) =
         </div>
       )}
     </>
-  );
-};
-
-export default Modal;
+  )
+}

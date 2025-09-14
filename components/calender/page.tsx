@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import Modal from "../modal/page"
+import { Modal } from "../modal/page"
 import AddEventModal from "./addEvent/page"
 import { Holiday } from "@/constants/calender"
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Plus, Star, Gift } from "lucide-react"
