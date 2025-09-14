@@ -116,7 +116,6 @@ const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event
             return
         }
 
-        // Build proper date object
         const [dd, mm, yyyy] = isCustomEvent ? formatDateToDDMMYYYY(date).split("-").map(Number) : date.split("-").map(Number);
         const [startHours, startMinutes] = time.split(":").map(Number);
         const [endHours, endMinutes] = end.split(":").map(Number);
@@ -213,7 +212,6 @@ const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event
         setIsOpen(false)
     }
 
-    // Calculate duration
     const getDuration = () => {
         if (time && end) {
             const start = new Date(`2000-01-01T${time}`);
@@ -289,9 +287,7 @@ const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event
                         />
                     </div>
 
-                    {/* Date and Time Section */}
                     <div className="space-y-4">
-                        {/* Custom Date Input */}
                         {isCustomEvent && (
                             <div className="space-y-2">
                                 <label htmlFor="date" className="flex items-center text-sm font-medium text-gray-700">

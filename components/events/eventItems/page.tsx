@@ -72,7 +72,6 @@ const EventItem: React.FC<EventItemProps> = ({ id, title, date, eventType, mood,
       setIsMobile(window.innerWidth <= 768)
     }
 
-    // Initial check
     checkMobile()
 
     window.addEventListener('resize', checkMobile)
