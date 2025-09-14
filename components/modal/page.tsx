@@ -9,7 +9,7 @@ type ModalProps = {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const Modal: React.FC<ModalProps> = ({ trigger, children, isOpen, setIsOpen }) => {
+const Modal: React.FC<ModalProps> = ({ trigger, children, isOpen, setIsOpen }) => {
   useEffect(() => {
     if (isOpen) {
       // Prevent body scroll when modal is open
@@ -37,13 +37,7 @@ export const Modal: React.FC<ModalProps> = ({ trigger, children, isOpen, setIsOp
       {trigger}
 
       {isOpen && (
-        <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 model-backdrop"
-          style={{ 
-            height: '100vh',
-            minHeight: '100vh',
-          }}
-        >
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 modal-backdrop">
           <div className="bg-white rounded-lg shadow-lg w-[90%] max-w-md p-6 relative max-h-[80vh] overflow-y-auto">
             <button
               onClick={() => setIsOpen(false)}
@@ -58,3 +52,5 @@ export const Modal: React.FC<ModalProps> = ({ trigger, children, isOpen, setIsOp
     </>
   )
 }
+
+export default Modal
