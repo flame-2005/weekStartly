@@ -111,14 +111,14 @@ const Calendar: React.FC<CalendarProps> = ({ year, month, holidays = [] }) => {
                 {/* Calendar Content */}
                 <div className="p-6">
                     {/* Weekday Headers */}
-                    <div className="grid grid-cols-7 gap-2 mb-4">
+                    <div className="grid grid-cols-7 mb-4">
                         {dayNames.map((day, idx) => (
                             <div
                                 key={day}
-                                className={`text-center py-3 px-2 rounded-lg font-semibold text-sm
+                                className={`text-center py-3 rounded-lg font-semibold text-sm
                                     ${idx >= 5
                                         ? "bg-red-50 text-red-600 border border-red-100"
-                                        : "bg-gray-50 text-gray-700 border border-gray-100"
+                                        : "text-gray-700"
                                     }`}
                             >
                                 {day}
