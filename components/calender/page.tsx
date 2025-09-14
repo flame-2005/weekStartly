@@ -111,11 +111,11 @@ const Calendar: React.FC<CalendarProps> = ({ year, month, holidays = [] }) => {
                 {/* Calendar Content */}
                 <div className="p-6">
                     {/* Weekday Headers */}
-                    <div className="grid grid-cols-7 mb-4">
+                    <div className="grid grid-cols-7 mb-4 gap-1.5">
                         {dayNames.map((day, idx) => (
                             <div
                                 key={day}
-                                className={`text-center py-3 rounded-lg font-semibold text-sm
+                                className={`text-center py-3 px-2 rounded-lg font-semibold text-sm
                                     ${idx >= 5
                                         ? "bg-red-50 text-red-600 border border-red-100"
                                         : "text-gray-700"
@@ -187,7 +187,7 @@ const Calendar: React.FC<CalendarProps> = ({ year, month, holidays = [] }) => {
                                                 <div className="flex items-center justify-center w-full">
                                                     {holiday && (
                                                         <div className="group/tooltip relative">
-                                                            <div className="flex items-center space-x-1 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full">
+                                                            <div className="flex items-center space-x-1 bg-white/90 border-red-600 border-2 backdrop-blur-sm px-2 py-1 rounded-full">
                                                                 <Gift className="w-3 h-3 text-red-600" />
                                                                 <span className="text-xs font-light text-red-600 truncate max-w-[60px]">
                                                                     {holiday.title.length > 8 ? holiday.title.slice(0, 6) + "…" : holiday.title}
@@ -229,8 +229,8 @@ const Calendar: React.FC<CalendarProps> = ({ year, month, holidays = [] }) => {
                                 <div
                                     key={day}
                                     className={`${baseClasses} ${isToday
-                                            ? "bg-gradient-to-br from-blue-500 to-purple-600 text-white border-blue-500 shadow-lg"
-                                            : "bg-gradient-to-br from-gray-50 to-white border-gray-200 hover:from-blue-50 hover:to-purple-50 hover:border-blue-200"
+                                        ? "bg-gradient-to-br from-blue-500 to-purple-600 text-white border-blue-500 shadow-lg"
+                                        : "bg-gradient-to-br from-gray-50 to-white border-gray-200 hover:from-blue-50 hover:to-purple-50 hover:border-blue-200"
                                         }`}
                                 >
                                     <div className="flex items-center justify-center w-full">
@@ -245,7 +245,7 @@ const Calendar: React.FC<CalendarProps> = ({ year, month, holidays = [] }) => {
                                     <div className="flex items-center justify-center w-full">
                                         {holiday && (
                                             <div className="group/tooltip relative">
-                                                <div className="flex items-center space-x-1 bg-red-500 text-white px-2 py-1 rounded-full">
+                                                <div className="flex items-center space-x-1 bg-red-500 text-white border-white border-2 px-2 py-1 rounded-full">
                                                     <Gift className="w-3 h-3" />
                                                     <span className="text-xs font-medium truncate max-w-[60px]">
                                                         {holiday.title.length > 8 ? holiday.title.slice(0, 6) + "…" : holiday.title}
