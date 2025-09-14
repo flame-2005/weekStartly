@@ -1,6 +1,8 @@
 "use client"
 
 import React, { useState, ReactElement, useEffect } from "react"
+import ReactDOM from "react-dom"
+
 
 type ModalProps = {
   trigger: ReactElement
@@ -9,41 +11,28 @@ type ModalProps = {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const Modal: React.FC<ModalProps> = ({ trigger, children, isOpen, setIsOpen }) => {
+const Modal = ({ trigger, children, isOpen, setIsOpen }: ModalProps) => {
   useEffect(() => {
     if (isOpen) {
-      // Prevent body scroll when modal is open
-      document.body.style.overflow = 'hidden'
-      // Store the current viewport height
-      const vh = window.innerHeight * 0.01
-      document.documentElement.style.setProperty('--vh', `${vh}px`)
-      
-      // Update on resize (keyboard open/close)
-      const updateVH = () => {
-        const vh = window.innerHeight * 0.01
-        document.documentElement.style.setProperty('--vh', `${vh}px`)
-      }
-      
-      window.addEventListener('resize', updateVH)
+      document.body.style.overflow = "hidden"
       return () => {
-        document.body.style.overflow = 'unset'
-        window.removeEventListener('resize', updateVH)
+        document.body.style.overflow = "unset"
       }
     }
   }, [isOpen])
 
-  return (
-    <>
-      {trigger}
+  if (!isOpen) return <>{trigger}</>
 
-      {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 modal-backdrop">
-          <div className="bg-white rounded-lg shadow-lg w-[90%] max-w-md relative max-h-[90vh] overflow-y-auto">
-            {children}
-          </div>
-        </div>
-      )}
-    </>
+  return ReactDOM.createPortal(
+    <div
+      className="fixed inset-0 flex items-center justify-center bg-black/20"
+      style={{ zIndex: 99999 }}
+    >
+      <div className="bg-white rounded-lg shadow-lg w-[90%] max-w-md relative max-h-[90vh] overflow-y-auto">
+        {children}
+      </div>
+    </div>,
+    document.body
   )
 }
 

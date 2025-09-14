@@ -33,6 +33,7 @@ const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event
     const [title, setTitle] = useState(event?.title || "")
     const [mood, setMood] = useState(event?.mood || "")
     const [theme, setTheme] = useState(event?.mood || "")
+    const [skipedSignIn, setSkipedSignIn] = useState(false);
 
     // Utility to format date to HH:MM in local time
     const getLocalTimeString = (dateStr: string) => {
@@ -68,7 +69,7 @@ const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event
 
     const { data: session, status } = useSession()
 
-    if (status === "unauthenticated") {
+    if (status === "unauthenticated" && !skipedSignIn) {
         return (
             <div className="bg-black bg-opacity-50 flex items-center justify-center z-50">
                 <div className="bg-white rounded-xl p-8 text-center w-full shadow-2xl">
@@ -85,6 +86,14 @@ const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event
                                  transition-colors duration-200 font-medium"
                     >
                         Sign in with Google
+                    </button>
+                    <button
+                        onClick={() => setSkipedSignIn(true)}
+                        className="mt-4 w-full px-6 py-3 border border-gray-300 rounded-lg text-gray-700 
+                                 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 
+                                 transition-colors duration-200 font-medium"
+                    >
+                        Skip
                     </button>
                 </div>
             </div>
@@ -117,6 +126,7 @@ const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event
 
         if (event) {
             setUpdating(true);
+            if(session?.accessToken && event.eventId){
             try {
                 const res = await fetch("/api/google-calendar/update", {
                     method: "POST",
@@ -141,6 +151,7 @@ const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event
             } catch (err) {
                 showToast(`Failed to update event in Google Calendar: ${err}`, "error");
             }
+        }
             dispatch({
                 type: EventActionType.UPDATE,
                 payload: {
@@ -153,7 +164,7 @@ const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event
             showToast("Event Updated successfully!", "success")
         } else {
             setSaving(true);
-            if (session?.accessToken) {
+            if (session?.accessToken ) {
                 try {
                     const res = await fetch("/api/google-calendar/add", {
                         method: "POST",
