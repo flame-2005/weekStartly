@@ -115,7 +115,7 @@ const Calendar: React.FC<CalendarProps> = ({ year, month, holidays = [] }) => {
                         {dayNames.map((day, idx) => (
                             <div
                                 key={day}
-                                className={`text-center py-3 px-2 rounded-lg font-semibold text-sm
+                                className={`text-center py-3 rounded-lg font-semibold text-sm
                                     ${idx >= 5
                                         ? "bg-red-50 text-red-600 border border-red-100"
                                         : "text-gray-700"
