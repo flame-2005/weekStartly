@@ -150,7 +150,7 @@ const Calendar: React.FC<CalendarProps> = ({ year, month, holidays = [] }) => {
 
                             // Base classes for calendar cells
                             const baseClasses = `
-                                relative h-12 rounded-xl border-2 flex flex-col justify-center items-center 
+                                relative aspect-square sm:aspect-auto sm:h-12 rounded-xl border-2 flex flex-col justify-center items-center 
                                 text-sm font-medium text-gray-700
                                 transition-all duration-200
                             `
