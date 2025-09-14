@@ -1,6 +1,6 @@
 "use client"
 
-import React, { use, useEffect, useRef, useState } from "react"
+import React, {useEffect, useRef, useState } from "react"
 import { useEvents } from "@/context/EventContext"
 import { EventActionType, EventActivityEmojis, EventActivityType, MoodType, WeekendTheme } from "@/constants/event"
 import { signIn, useSession } from "next-auth/react"
