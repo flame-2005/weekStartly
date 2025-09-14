@@ -71,7 +71,7 @@ const Calendar: React.FC<CalendarProps> = ({ year, month, holidays = [] }) => {
             {/* Calendar Card */}
             <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-visible">
                 {/* Header */}
-                <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4 text-white overflow-hodden rounded-t-3xl">
+                <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4 text-white overflow-hidden rounded-t-3xl">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-4">
                             <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">

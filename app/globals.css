@@ -1,2 +1,20 @@
 @import "tailwindcss";
 
+body.keyboard-open {
+  height: auto;
+}
+
+.modal-backdrop {
+  height: 100vh; /* fallback */
+  height: calc(var(--vh, 1vh) * 100);
+  min-height: 100vh; /* fallback */
+  min-height: calc(var(--vh, 1vh) * 100);
+}
+
+/* Modern browsers support */
+@supports (height: 100dvh) {
+  .modal-backdrop {
+    height: 100dvh;
+    min-height: 100dvh;
+  }
+}
