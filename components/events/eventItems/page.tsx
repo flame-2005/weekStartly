@@ -66,20 +66,6 @@ const EventItem: React.FC<EventItemProps> = ({ id, title, date, eventType, mood,
 
   const { data: session } = useSession()
 
-  // Check if device is mobile with resize handling
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768)
-    }
-
-    // Initial check
-    checkMobile()
-
-    window.addEventListener('resize', checkMobile)
-
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
-
   const handleDelete = async () => {
     if (session?.accessToken && eventId) {
       try {
