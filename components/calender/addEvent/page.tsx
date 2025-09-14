@@ -8,6 +8,7 @@ import { useToast } from "@/context/toastContest"
 import CircularLoader from "@/components/circularLoader/page"
 import { Calendar, Clock, X, Save, Edit3, Smile, Palette, Activity } from "lucide-react"
 
+
 type EventModalProps = {
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
     date: string
@@ -28,12 +29,11 @@ type EventModalProps = {
 }
 
 const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event, isCustomEvent = false }) => {
-    const { dispatch } = useEvents()
+    const { dispatch,skipedSignIn,setSkipedSignIn } = useEvents()
 
     const [title, setTitle] = useState(event?.title || "")
     const [mood, setMood] = useState(event?.mood || "")
     const [theme, setTheme] = useState(event?.mood || "")
-    const [skipedSignIn, setSkipedSignIn] = useState(false);
 
     // Utility to format date to HH:MM in local time
     const getLocalTimeString = (dateStr: string) => {

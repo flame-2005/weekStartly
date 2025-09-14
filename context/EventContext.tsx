@@ -1,6 +1,13 @@
 "use client"
 
-import React, { createContext, useReducer, useContext, ReactNode, useEffect } from "react"
+import React, {
+  createContext,
+  useReducer,
+  useContext,
+  ReactNode,
+  useEffect,
+  useState,
+} from "react"
 import { EventType, EventActionType } from "@/constants/event"
 
 type State = {
@@ -37,10 +44,12 @@ function eventReducer(state: State, action: Action): State {
   }
 }
 
-// Context
+// Context type
 const EventContext = createContext<{
   state: State
   dispatch: React.Dispatch<Action>
+  skipedSignIn: boolean
+  setSkipedSignIn: React.Dispatch<React.SetStateAction<boolean>>
 } | null>(null)
 
 // Provider
@@ -55,18 +64,20 @@ export function EventProvider({ children }: { children: ReactNode }) {
     storedEvents ? { events: JSON.parse(storedEvents) } : initialState
   )
 
+  const [skipedSignIn, setSkipedSignIn] = useState(false)
+
   useEffect(() => {
     localStorage.setItem("events", JSON.stringify(state.events))
   }, [state.events])
 
   return (
-    <EventContext.Provider value={{ state, dispatch }}>
+    <EventContext.Provider value={{ state, dispatch, skipedSignIn, setSkipedSignIn }}>
       {children}
     </EventContext.Provider>
   )
 }
 
-// Hook to use events
+// Hook to use events + skipedSignIn
 export function useEvents() {
   const context = useContext(EventContext)
   if (!context) {
