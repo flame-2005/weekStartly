@@ -70,8 +70,8 @@ const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event
 
     if (status === "unauthenticated") {
         return (
-            <div className="bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-                <div className="bg-white rounded-xl p-8 text-center max-w-sm w-full shadow-2xl">
+            <div className="bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div className="bg-white rounded-xl p-8 text-center w-full shadow-2xl">
                     <div className="mb-6">
                         <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                             <Activity className="w-8 h-8 text-blue-600" />
