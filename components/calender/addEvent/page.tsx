@@ -51,7 +51,6 @@ const EventModal: React.FC<EventModalProps> = ({ setIsOpen, date, setDate, event
     const [updating, setUpdating] = useState(false);
 
     const { showToast } = useToast();
-    console.log(event);
 
     useEffect(() => {
         if (event) {
